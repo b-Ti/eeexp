@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>社区搜索</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var app = {};
+
+    var option;
+
+    var data = GetRequest()
+    console.log(data);
+    var ROOT_PATH = '/api/cscmp/getData'
+
+    function getDataView(data) {
+        $.get(ROOT_PATH,data, function (graph) {
+            myChart.hideLoading();
+            graph.data.nodes.forEach(function (node) {
+                node.symbolSize = 5;
+            });
+            option = {
+                title: {
+                    text: 'Les Miserables',
+                    subtext: 'Default layout',
+                    top: 'bottom',
+                    left: 'right'
+                },
+                tooltip: {},
+                legend: [
+                    {
+                        // selectedMode: 'single',
+                        data: graph.data.categories.map(function (a) {
+                            return a.name;
+                        })
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Les Miserables',
+                        type: 'graph',
+                        layout: 'force',
+                        data: graph.data.nodes,
+                        links: graph.data.links,
+                        categories: graph.data.categories,
+                        roam: true,
+                        label: {
+                            position: 'right'
+                        },
+                        force: {
+                            repulsion: 100
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        });
+    }
+
+    myChart.showLoading();
+    getDataView(data);
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+    myChart.on('click', function (params) {
+        if (params.dataType === "node"){
+            getDataView(params.data);
+        }
+        console.log(params);
+    });
+
+    function GetRequest() {
+        var url = window.location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+</script>
+</body>
+</html>
+    

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>社区搜索</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" th:href="@{/static/layui/css/layui.css}">
+
+    <style type="text/css">
+
+
+        .main {
+            width: 40%;
+            margin: 300px auto;
+            text-align: center;
+        }
+
+        .site-h1 {
+            margin-bottom: 20px;
+            line-height: 60px;
+            padding-bottom: 10px;
+            color: #393D49;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        .layui-form-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: stretch;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .input-opt {
+            float: left;
+            width: 15%;
+        }
+
+        .input-text {
+            float: right;
+            width: 84%;
+        }
+
+
+        .items .cover img {
+            padding: 10px;
+            height: 80px;
+            width: 75px;
+            text-align: center;
+            vertical-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="main">
+    <h1 class="site-h1">
+        <img src="static/img/ircon.png" width="64" height="64"/>
+        <i> CSCMP社区搜索</i>
+    </h1>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="input-opt">
+                <span>社区ID：</span>
+            </div>
+            <div class="input-text">
+                <input type="text" name="queryId" required lay-verify="" placeholder="请输入节点ID，例如：27515" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="input-opt">
+                <span>查询参数：</span>
+            </div>
+            <div class="input-text">
+                <input type="text" name="queryK" required lay-verify="" placeholder="请输入查询参数，例如：10" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="input-opt">
+                <span>元路径：</span>
+            </div>
+            <div class="input-text">
+                <input type="text" name="queryMPath" required lay-verify="" placeholder="请输入元路径，例如：0 2 3 5 0 1 2" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="input-opt">
+                <span>约束节点集：</span>
+            </div>
+            <div class="input-text">
+                <input type="text" name="sc" required lay-verify="" placeholder="约束节点集，例如单个：31099 例如多个：31099,31088" autocomplete="off"
+                       class="layui-input">
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn-submit" lay-submit="" lay-filter="formDemo">搜索</button>
+        </div>
+    </form>
+</div>
+<script src="/static/js/jquery-1.11.3.min.js" th:src="@{/static/js/jquery-1.11.3.min.js}"></script>
+<script src="/static/layui/layui.js" th:src="@{/static/layui/layui.js}"></script>
+<script th:src="@{/static/js/util.js}"></script>
+
+<!--ctx-->
+<script th:replace="~{fragment::ctx}"></script>
+
+<script>
+    var form;
+    // 请求参数
+    var param = {};
+    layui.use(['element','form', 'jquery'], function () {
+        form = layui.form;
+        $ = layui.$;
+        var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            console.log(data.field);
+            showRecord(data.field);
+            return false;
+        });
+    });
+    function showRecord(data) {
+        window.location.href =  ctx+"view?queryId="+data.queryId+"&queryK="+data.queryK+"&queryMPath="+data.queryMPath +"&sc="+data.sc;
+    }
+
+
+
+
+
+
+</script>
+</body>
+</html>

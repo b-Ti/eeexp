@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cscmp.mapper.VertexMapMapper">
+
+    <resultMap id="VertexMap" type="com.example.cscmp.entity.VertexMap">
+        <result property="f1" column="f1"/>
+        <result property="f2" column="f2"/>
+        <result property="f3" column="f3"/>
+        <result property="f4" column="f4"/>
+    </resultMap>
+
+    <select id="select" parameterType="java.util.List" resultMap="VertexMap">
+        select * from vertex_map where f1 in
+        <foreach item="item" collection="list"  index="" open="(" close=")" separator=",">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </select>
+
+</mapper>
